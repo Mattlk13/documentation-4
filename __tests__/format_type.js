@@ -12,7 +12,7 @@ function stringify(children) {
   });
 }
 
-test('formatType', function() {
+test('formatType', function () {
   const linkerStack = new LinkerStack({});
   const formatType = _formatType.bind(undefined, linkerStack.link);
   [
@@ -23,18 +23,18 @@ test('formatType', function() {
     ['namedType.typeProperty', 'namedType.typeProperty'],
     [
       'Array|undefined',
-      '([Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) \\| [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))'
+      '([Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array) | [undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined))'
     ],
     [
       'Array<number>',
-      '[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)&lt;[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)>'
+      '[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)<[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)>'
     ],
     [
       'number!',
       '[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)!'
     ],
-    ["('pre'|'post')", '(`"pre"` \\| `"post"`)'],
-    ["'pre'|'post'", '(`"pre"` \\| `"post"`)'],
+    ["('pre'|'post')", '(`"pre"` | `"post"`)'],
+    ["'pre'|'post'", '(`"pre"` | `"post"`)'],
     [
       'function(string, boolean)',
       'function ([string](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String), [boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean))'
@@ -81,14 +81,14 @@ test('formatType', function() {
       'undefined',
       '[undefined](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/undefined)'
     ]
-  ].forEach(function(example) {
+  ].forEach(function (example) {
     expect(
       stringify(
         formatType(
           parse('@param {' + example[0] + '} a', { sloppy: true }).tags[0].type
         )
       )
-    ).toEqual(example[1]);
+    ).toEqual(example[1] + '\n');
   });
 
   expect(
@@ -96,13 +96,13 @@ test('formatType', function() {
       formatType(parse('@param {number} [a=1]', { sloppy: true }).tags[0].type)
     )
   ).toEqual(
-    '[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?'
+    '[number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)?\n'
   );
 
   expect(
     stringify(
       _formatType(
-        function(str) {
+        function (str) {
           return str.toUpperCase();
         },
         parse('@param {Foo} a', {
@@ -110,11 +110,11 @@ test('formatType', function() {
         }).tags[0].type
       )
     )
-  ).toEqual('[Foo](FOO)');
+  ).toEqual('[Foo](FOO)\n');
 
-  expect(stringify(formatType())).toEqual('any');
+  expect(stringify(formatType())).toEqual('any\n');
 
-  expect(function() {
+  expect(function () {
     formatType({});
   }).toThrow();
 });

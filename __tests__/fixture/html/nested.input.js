@@ -112,7 +112,7 @@ function bar() {
  * Rest property function
  * @returns {undefined} nothing
  */
-function bar(...toys: Number) {
+function bar2(...toys: Number) {
   return undefined;
 }
 
@@ -123,7 +123,7 @@ function bar(...toys: Number) {
  *
  * @returns {undefined} nothing
  */
-function bar() {
+function bar3() {
   return undefined;
 }
 
@@ -158,3 +158,11 @@ var customStreams = {};
 customStreams.passthrough = function() {
   this.custom = true;
 };
+
+/**
+ * | Col 1 | Col 2 | Col 3 |
+ * |-------|-------|-------|
+ * | Dat 1 | Dat 2 | Dat 3 |
+ * | Dat 4 | Dat 5 | Dat 6 |
+ */
+ var tableObj = {};

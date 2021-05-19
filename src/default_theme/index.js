@@ -13,15 +13,16 @@ function isFunction(section) {
   return (
     section.kind === 'function' ||
     (section.kind === 'typedef' &&
+      section.type &&
       section.type.type === 'NameExpression' &&
       section.type.name === 'Function')
   );
 }
 
-module.exports = function(comments, config) {
+module.exports = function (comments, config) {
   var linkerStack = new LinkerStack(config).namespaceResolver(
     comments,
-    function(namespace) {
+    function (namespace) {
       var slugger = new GithubSlugger();
       return '#' + slugger.slug(namespace);
     }
@@ -79,7 +80,7 @@ module.exports = function(comments, config) {
         if (config.hljs && config.hljs.highlightAuto) {
           return hljs.highlightAuto(example).value;
         }
-        return hljs.highlight('js', example).value;
+        return hljs.highlight(example, { language: 'js' }).value;
       }
     }
   };
@@ -109,12 +110,12 @@ module.exports = function(comments, config) {
   // push assets into the pipeline as well.
   return new Promise(resolve => {
     vfs.src([__dirname + '/assets/**'], { base: __dirname }).pipe(
-      concat(function(files) {
+      concat(function (files) {
         resolve(
           files.concat(
             new File({
               path: 'index.html',
-              contents: new Buffer(
+              contents: Buffer.from(
                 pageTemplate({
                   docs: comments,
                   config
